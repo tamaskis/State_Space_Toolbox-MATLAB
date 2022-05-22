@@ -3,13 +3,21 @@
 % clinsys_lti  Linearize a continuous-time state space system about an
 % equilibrium point.
 %
-%   [A,B] = clinsys_lti(f,[],xe,ue)
-%   [A,C] = clinsys_lti(f,h,xe)
 %   [A,B,C,D] = clinsys_lti(f,h,xe,ue)
-%   [__] = clinsys_lti(__,tl)
+%   [A,B,C,D] = clinsys_lti(f,h,xe,ue,tl)
 %
-% Author: Tamas Kis
-% Last Update: 2022-05-21
+% See also TODO.
+%
+% Copyright © 2022 Tamas Kis
+% Last Update: 2022-05-22
+% Website: https://tamaskis.github.io
+% Contact: tamas.a.kis@outlook.com
+%
+% TOOLBOX DOCUMENTATION:
+% https://tamaskis.github.io/State_Space_Toolbox-MATLAB/
+%
+% TECHNICAL DOCUMENTATION:
+% https://tamaskis.github.io/documentation/State_Space_Systems_Linearization_Discretization_and_Simulation.pdf
 %
 %--------------------------------------------------------------------------
 %
@@ -19,11 +27,9 @@
 %   f       - (1×1 function_handle) continuous dynamics equation,
 %             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
 %   h       - (1×1 function_handle) (OPTIONAL) continuous measurement 
-%             equation, can have 2 or 3 input arguments:
-%               --> y = h(x,t) (h : ℝⁿ×ℝ → ℝᵖ)
-%               --> y = h(x,u,t) (h : ℝⁿ×ℝᵐ×ℝ → ℝᵖ)
+%             equation, y = h(x,u,t) (h : ℝⁿ×ℝᵐ×ℝ → ℝᵖ)
 %   xe      - (n×1 double) equilibrium state vector, xₑ
-%   ue      - (m×1 double) (OPTIONAL) equilibrium control input, uₑ
+%   ue      - (m×1 double) equilibrium control input, uₑ
 %   tl      - (1×1 double) (OPTIONAL) time at linearization, tₗ
 %
 % -------
@@ -37,29 +43,15 @@
 %==========================================================================
 function [A,B,C,D] = clinsys_lti(f,h,xe,ue,tl)
     
-    % defaults equilibrium control input to empty vector if not specified
-    if (nargin < 4)
-        ue = [];
-    end
-    
-    % defaults time at linearization to empty vector if not specified
+    % defaults time at linearization to empty vector
     if (nargin < 5)
         tl = [];
     end
     
-    % continuous dynamics Jacobian
+    % performs linearizations
     A = f2A_lti(f,xe,ue,tl);
-    
-    % continuous input Jacobian
     B = f2B_lti(f,xe,ue,tl);
-    
-    % continuous measurement and feedforward Jacobians
-    if isempty(h)
-        C = NaN;
-        D = NaN;
-    else
-        C = h2C_lti(h,xe,ue,tl);
-        D = h2D_lti(h,xe,ue,tl);
-    end
+    C = h2C_lti(h,xe,ue,tl);
+    D = h2D_lti(h,xe,ue,tl);
     
 end

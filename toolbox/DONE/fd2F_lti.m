@@ -1,12 +1,12 @@
 %==========================================================================
 %
-% f2A_lti  Continuous dynamics Jacobian from continuous dynamics equation
+% fd2F_lti  Discrete dynamics Jacobian from discrete dynamics equation
 % via linearization about an equilibrium point.
 %
-%   A = f2A_lti(f,xe)
-%   A = f2A_lti(f,xe,ue)
-%   A = f2A_lti(f,xe,[],tl)
-%   A = f2A_lti(f,xe,ue,tl)
+%   F = fd2F_lti(fd,xe)
+%   F = fd2F_lti(fd,xe,ue)
+%   F = fd2F_lti(fd,xe,[],kl)
+%   F = fd2F_lti(fd,xe,ue,kl)
 %
 % See also TODO.
 %
@@ -26,31 +26,31 @@
 % ------
 % INPUT:
 % ------
-%   f       - (1×1 function_handle) continuous dynamics equation,
-%             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
+%   fd      - (1×1 function_handle) discrete dynamics equation,
+%             xₖ₊₁ = fd(xₖ,uₖ,k) (fd : ℝⁿ×ℝᵐ×ℤ → ℝⁿ)
 %   xe      - (n×1 double) equilibrium state vector, xₑ
 %   ue      - (m×1 double) (OPTIONAL) equilibrium control input, uₑ
-%   tl      - (1×1 double) (OPTIONAL) time at linearization, tₗ
+%   kl      - (1×1 double) (OPTIONAL) sample number at linearization, kₗ
 %
 % -------
 % OUTPUT:
 % -------
-%   A       - (n×n double) continuous dynamics Jacobian
+%   F       - (n×n double) discrete dynamics Jacobian
 %
 %==========================================================================
-function A = f2A_lti(f,xe,ue,tl)
+function F = fd2F_lti(fd,xe,ue,kl)
     
-    % defaults equilibrium input to empty vector
+    % defaults control input to empty vector
     if (nargin < 3)
         ue = [];
     end
     
-    % defaults time at linearization to empty vector
+    % defaults sample number to empty vector
     if (nargin < 4)
-        tl = [];
+        kl = [];
     end
     
-    % continuous dynamics Jacobian
-    A = ijacobian(@(x)f(x,ue,tl),xe);
+    % discrete dynamics Jacobian
+    F = ijacobian(@(xk)fd(xk,ue,kl),xe);
     
 end

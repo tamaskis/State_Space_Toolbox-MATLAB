@@ -8,7 +8,7 @@
 % See also k2t_fun.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-02
+% Last Update: 2022-05-22
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %

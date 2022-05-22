@@ -4,8 +4,18 @@
 %
 %   F = fd2F_fun(fd)
 %
-% Author: Tamas Kis
-% Last Update: 2022-03-31
+% See also TODO.
+%
+% Copyright © 2022 Tamas Kis
+% Last Update: 2022-05-22
+% Website: https://tamaskis.github.io
+% Contact: tamas.a.kis@outlook.com
+%
+% TOOLBOX DOCUMENTATION:
+% https://tamaskis.github.io/State_Space_Toolbox-MATLAB/
+%
+% TECHNICAL DOCUMENTATION:
+% https://tamaskis.github.io/documentation/State_Space_Systems_Linearization_Discretization_and_Simulation.pdf
 %
 %--------------------------------------------------------------------------
 %
@@ -23,5 +33,5 @@
 %
 %==========================================================================
 function F = fd2F_fun(fd)
-    F = @(xk,uk,k) fd2F_num(fd,xk,uk,k);
+    F = @(xk,uk,k) ijacobian(@(x)fd(x,uk,k),xk);
 end

@@ -1,14 +1,14 @@
 %==========================================================================
 %
-% k2t_fun  Time as a function of sample number.
+% hd2H_fun  Discrete measurement Jacobian from discrete measurement
+% equation.
 %
-%   t = k2t_fun(dt)
-%   t = k2t_fun(dt,t0)
+%   H = hd2H_fun(hd)
 %
-% See also t2k_fun.
+% See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-02
+% Last Update: 2022-05-22
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -23,20 +23,16 @@
 % ------
 % INPUT:
 % ------
-%   dt      - (1×1 double) time step, Δt
-%   t0      - (1×1 double) (OPTIONAL) initial time, t₀ (defaults to 0)
+%   hd      - (1×1 function_handle) discrete measurement equation, 
+%             yₖ = hd(xₖ,uₖ,k) (hd : ℝⁿ×ℝᵐ×ℤ → ℝᵖ)
 %
 % -------
 % OUTPUT:
 % -------
-%   t       - (1×1 function_handle) time as a function of sample number,
-%             tₖ = t(k) (tₖ : ℤ → ℝ)
+%   H       - (1×1 function_handle) discrete measurement Jacobian, 
+%             Hₖ = H(xₖ,uₖ,k) (H : ℝⁿ×ℝᵐ×ℤ → ℝᵖˣⁿ)
 %
 %==========================================================================
-function t = k2t_fun(dt,t0)
-    if (nargin == 2) && ~isempty(t0)
-        t = @(k) t0+k*dt;
-    else
-        t = @(k) k*dt;
-    end
+function H = hd2H_fun(hd)
+    H = @(xk,uk,k) ijacobian(@(x)hd(x,uk,k),xk);
 end

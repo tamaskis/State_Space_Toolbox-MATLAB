@@ -4,8 +4,18 @@
 %
 %   A = f2B_fun(f)
 %
-% Author: Tamas Kis
-% Last Update: 2022-05-21
+% See also TODO.
+%
+% Copyright © 2022 Tamas Kis
+% Last Update: 2022-05-22
+% Website: https://tamaskis.github.io
+% Contact: tamas.a.kis@outlook.com
+%
+% TOOLBOX DOCUMENTATION:
+% https://tamaskis.github.io/State_Space_Toolbox-MATLAB/
+%
+% TECHNICAL DOCUMENTATION:
+% https://tamaskis.github.io/documentation/State_Space_Systems_Linearization_Discretization_and_Simulation.pdf
 %
 %--------------------------------------------------------------------------
 %
@@ -18,8 +28,8 @@
 % -------
 % OUTPUT:
 % -------
-%   B       - (1×1 function_handle) continuous input Jacobian, 
-%             B(t) = B(x,u,t) (B : ℝⁿ×ℝᵐ×ℝ → ℝⁿˣᵐ)
+%   B       - (1×1 function_handle) continuous input Jacobian, B(x,u,t) 
+%             (B : ℝⁿ×ℝᵐ×ℝ → ℝⁿˣᵐ)
 %
 %==========================================================================
 function B = f2B_fun(f)

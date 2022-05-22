@@ -34,7 +34,7 @@ g = 10;     % gravitational acceleration [m/s²]
 f = @(x,u,t) dynamics(x,u,M,m,l,g);
 
 % continuous-time nonlinear measurement equation
-h = @(x,t) x(3);
+h = @(x,u,t) x(3);
 
 % initial guess for equilibrium point
 x0 = zeros(4,1);

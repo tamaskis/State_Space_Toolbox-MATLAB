@@ -1,15 +1,25 @@
 %==========================================================================
 %
 % h2C_lti  Continuous measurement Jacobian from continuous measurement
-% equation.
+% equation via linearization about an equilibrium point.
 %
 %   C = h2C_lti(h,xe)
 %   C = h2C_lti(h,xe,ue)
 %   C = h2C_lti(h,xe,[],tl)
 %   C = h2C_lti(h,xe,ue,tl)
 %
-% Author: Tamas Kis
-% Last Update: 2022-05-21
+% See also TODO.
+%
+% Copyright © 2022 Tamas Kis
+% Last Update: 2022-05-22
+% Website: https://tamaskis.github.io
+% Contact: tamas.a.kis@outlook.com
+%
+% TOOLBOX DOCUMENTATION:
+% https://tamaskis.github.io/State_Space_Toolbox-MATLAB/
+%
+% TECHNICAL DOCUMENTATION:
+% https://tamaskis.github.io/documentation/State_Space_Systems_Linearization_Discretization_and_Simulation.pdf
 %
 %--------------------------------------------------------------------------
 %
@@ -42,12 +52,12 @@ function C = h2C_lti(h,xe,ue,tl)
         num_arg = 2;
     end
     
-    % defaults control input to empty vector if not specified
+    % defaults control input to empty vector
     if (nargin < 3)
         ue = [];
     end
     
-    % defaults time at linearization to empty vector if not specified
+    % defaults time at linearization to empty vector
     if (nargin < 4)
         tl = [];
     end

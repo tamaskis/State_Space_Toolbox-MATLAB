@@ -1,12 +1,12 @@
 %==========================================================================
 %
-% f2A_lti  Continuous dynamics Jacobian from continuous dynamics equation
-% via linearization about an equilibrium point.
+% hd2H_lti  Discrete measurement Jacobian from discrete measurement
+% equation via linearization about an equilibrium point.
 %
-%   A = f2A_lti(f,xe)
-%   A = f2A_lti(f,xe,ue)
-%   A = f2A_lti(f,xe,[],tl)
-%   A = f2A_lti(f,xe,ue,tl)
+%   H = hd2H_lti(hd,xe)
+%   H = hd2H_lti(hd,xe,ue)
+%   H = hd2H_lti(hd,xe,[],kl)
+%   H = hd2H_lti(hd,xe,ue,kl)
 %
 % See also TODO.
 %
@@ -26,31 +26,32 @@
 % ------
 % INPUT:
 % ------
-%   f       - (1×1 function_handle) continuous dynamics equation,
-%             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
+%   hd      - (1×1 function_handle) discrete measurement equation
+%               --> if "u" NOT input, then yₖ = hd(xₖ,k) (hd : ℝⁿ×ℤ → ℝᵖ)
+%               --> if "u" input, then yₖ = hd(xₖ,uₖ,k) (hd : ℝⁿ×ℝᵐ×ℤ → ℝᵖ)
 %   xe      - (n×1 double) equilibrium state vector, xₑ
 %   ue      - (m×1 double) (OPTIONAL) equilibrium control input, uₑ
-%   tl      - (1×1 double) (OPTIONAL) time at linearization, tₗ
+%   kl      - (1×1 double) (OPTIONAL) sample number at linearization, kₗ
 %
 % -------
 % OUTPUT:
 % -------
-%   A       - (n×n double) continuous dynamics Jacobian
+%   H       - (p×n double) discrete measurement Jacobian
 %
 %==========================================================================
-function A = f2A_lti(f,xe,ue,tl)
+function H = hd2H_lti(hd,xe,ue,kl)
     
-    % defaults equilibrium input to empty vector
+    % defaults equilibrium control input to empty vector
     if (nargin < 3)
         ue = [];
     end
     
-    % defaults time at linearization to empty vector
+    % defaults sample number at linearization to empty vector
     if (nargin < 4)
-        tl = [];
+        kl = [];
     end
     
-    % continuous dynamics Jacobian
-    A = ijacobian(@(x)f(x,ue,tl),xe);
+    % discrete measurement Jacobian
+    H = ijacobian(@(x)hd(x,ue,kl),xe);
     
 end

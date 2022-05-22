@@ -1,10 +1,11 @@
 %==========================================================================
 %
-% f2A_fun  Continuous dynamics Jacobian from continuous dynamics equation.
+% k2t_fun  Time as a function of sample number.
 %
-%   A = f2A_fun(f)
+%   t = k2t_fun(dt)
+%   t = k2t_fun(dt,t0)
 %
-% See also TODO.
+% See also t2k_fun.
 %
 % Copyright © 2022 Tamas Kis
 % Last Update: 2022-05-22
@@ -22,16 +23,20 @@
 % ------
 % INPUT:
 % ------
-%   f       - (1×1 function_handle) continuous dynamics equation,
-%             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
+%   dt      - (1×1 double) time step, Δt
+%   t0      - (1×1 double) (OPTIONAL) initial time, t₀ (defaults to 0)
 %
 % -------
 % OUTPUT:
 % -------
-%   A       - (1×1 function_handle) continuous dynamics Jacobian, A(x,u,t) 
-%             (A : ℝⁿ×ℝᵐ×ℝ → ℝⁿˣⁿ)
+%   t       - (1×1 function_handle) time as a function of sample number,
+%             tₖ = t(k) (tₖ : ℤ → ℝ)
 %
 %==========================================================================
-function A = f2A_fun(f)
-    A = @(x,u,t) ijacobian(@(x)f(x,u,t),x);
+function t = k2t_fun(dt,t0)
+    if (nargin == 2) && ~isempty(t0)
+        t = @(k) t0+k*dt;
+    else
+        t = @(k) k*dt;
+    end
 end
