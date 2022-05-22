@@ -1,10 +1,9 @@
 %==========================================================================
 %
-% Af2stm_fun  State transition matrix from continuous dynamics Jacobian and 
-% continuous dynamics equation.
+% f2stm_fun  State transition matrix from continuous dynamics equation.
 %
-%   Phi = f2stm_fun(A,f,dt)
-%   Phi = f2stm_fun(A,f,dt,method)
+%   Phi = f2stm_fun(f,dt)
+%   Phi = f2stm_fun(f,dt,method)
 %
 % See also TODO.
 %
@@ -24,8 +23,6 @@
 % ------
 % INPUT:
 % ------
-%   A       - (1×1 function_handle) continuous dynamics Jacobian, A(x,u,t)
-%             (A : ℝⁿ×ℝᵐ×ℝ → ℝⁿˣⁿ)
 %   f       - (1×1 function_handle) continuous dynamics equation,
 %             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
 %   dt      - (1×1 double) time step, Δt
@@ -36,22 +33,21 @@
 % -------
 % OUTPUT:
 % -------
-%   Phi     - (1×1 function_handle) state transition matrix from current 
-%             time to next time, Φ(t+Δt,t) = Φ(x,u,t)
+%   Phi     - (1×1 function_handle) state transition matrix, 
+%             Φ(t+Δt,t) = Φ(x,u,t) (Φ : ℝⁿ×ℝᵐ×ℝ → ℝⁿˣⁿ)
 %
 %==========================================================================
-function Phi = Af2stm_fun(A,f,dt,method)
+function Phi = f2stm_fun(f,dt,method)
     
     % defaults method to 'RK4'
     if (nargin < 3) || isempty(method)
         method = 'RK4';
     end
     
+    % function handle for dynamics Jacobian
+    A = f2A_fun(f);
+    
     % function handle for state transition matrix
-    if (nargin == 6) && ~isempty(method)
-        Phi = @(x,u,t) Af2stm_num(A,f,x,u,t,dt,method);
-    else
-        Phi = @(x,u,t) Af2stm_num(A,f,x,u,t,dt);
-    end
+    Phi = Af2stm_fun(A,f,dt,method);
     
 end

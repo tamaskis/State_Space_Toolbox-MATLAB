@@ -43,10 +43,10 @@ function H = h2H_fun(h,dt,t0)
         t0 = 0;
     end
     
-    % time as a function of sample number
-    t = k2t_fun(dt,t0);
+    % function handle for C(x,u,t)
+    C = h2C_fun(h);
     
-    % function handle for discrete measurement Jacobian
-    H = @(xk,uk,k) ijacobian(@(x)h(x,uk,t(k)),xk);
+    % function handle for H(xₖ,uₖ,k)
+    H = C2H_fun(C,dt,t0);
     
 end

@@ -3,8 +3,6 @@
 % f2F_fun  Discrete dynamics Jacobian from continuous dynamics equation.
 %
 %   F = f2F_fun(f,dt)
-%   F = f2F_fun(f,dt,t0)
-%   F = f2F_fun(f,dt,[],method)
 %   F = f2F_fun(f,dt,t0,method)
 %
 % See also TODO.
@@ -48,17 +46,14 @@ function F = f2F_fun(f,dt,t0,method)
     end
     
     % defaults method to 'RK4'
-    if (nargin < 3) || isempty(method)
+    if (nargin < 4) || isempty(method)
         method = 'RK4';
     end
     
     % function handle for state transition matrix
     Phi = f2stm_fun(f,dt,method);
     
-    % function handle for time
-    t = k2t_fun(dt,t0);
-    
-    % function handle for discrete dynamics Jacobian
-    F = @(xk,uk,k) Phi(xk,uk,t(k));
+    % function handle for F(xₖ,uₖ,k)
+    F = stm2F_fun(Phi,dt,t0);
     
 end
