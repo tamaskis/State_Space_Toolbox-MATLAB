@@ -1,9 +1,10 @@
 %==========================================================================
 %
-% hd2J_fun  Discrete feedforward Jacobian from discrete measurement
-% equation.
+% hd2J_lti  Discrete feedforward Jacobian from discrete measurement
+% equation via linearization about an equilibrium point.
 %
-%   J = hd2J_fun(hd)
+%   J = hd2J_lti(hd,xe,ue)
+%   J = hd2J_lti(hd,xe,ue,kl)
 %
 % See also TODO.
 %
@@ -23,16 +24,26 @@
 % ------
 % INPUT:
 % ------
-%   hd      - (1×1 function_handle) discrete measurement equation,
+%   hd      - (1×1 function_handle) discrete measurement equation, 
 %             yₖ = hd(xₖ,uₖ,k) (hd : ℝⁿ×ℝᵐ×ℤ → ℝᵖ)
+%   xe      - (n×1 double) equilibrium state vector, xₑ
+%   ue      - (m×1 double) equilibrium control input, uₑ
+%   kl      - (1×1 double) (OPTIONAL) sample number at linearization, kₗ
 %
 % -------
 % OUTPUT:
 % -------
-%   J       - (1×1 function_handle) discrete feedforward Jacobian,
-%             Jₖ = J(x,u,t) (J : ℝⁿ×ℝᵐ×ℤ → ℝᵖˣᵐ)
+%   J       - (p×m double) discrete feedforward Jacobian
 %
 %==========================================================================
-function J = hd2J_fun(hd)
-    J = @(xk,uk,k) hd2J_num(hd,xk,uk,k);
+function J = hd2J_lti(hd,xe,ue,kl)
+    
+    % defaults sample number at linearization to empty vector
+    if (nargin < 4)
+        kl = [];
+    end
+    
+    % discrete feedforward Jacobian
+    J = ijacobian(@(uk)hd(xe,uk,kl),ue);
+    
 end

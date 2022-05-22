@@ -1,15 +1,12 @@
 %==========================================================================
 %
-% dlinsys_num  Linearize a discrete-time state space system (numerical
+% dlinsys_lti  Linearize a discrete-time state space system (numerical
 % approximation).
 %
-%   [F,G] = dlinsys_num(fd,[],xk,uk)
-%   [F,G] = dlinsys_num(fd,[],xe,ue)
-%   [F,G,H,E] = dlinsys_num(fd,hd,xk,uk)
-%   [F,G,H,E] = dlinsys_num(fd,hd,xe,ue)
-%   [__] = dlinsys_num(__,t)
+%   [F,G,H,J] = dlinsys_lti(fd,hd,xe,ue)
+%   [F,G,H,J] = dlinsys_lti(fd,hd,xe,ue,kl)
 %
-% See also fd2F_num, fd2G_num, fd2H_num.
+% See also fd2F_lti, fd2G_lti, fd2H_lti.
 %
 % Author: Tamas Kis
 % Last Update: 2022-02-25
@@ -54,7 +51,7 @@
 %   --> If h is not input, H is returned as NaN.
 %
 %==========================================================================
-function [F,G,H] = dlinsys_num(fd,hd,x,u,k)
+function [F,G,H] = dlinsys_lti(fd,hd,x,u,k)
     
     % defaults sample number to empty vector if not specified
     if (nargin < 5)
@@ -62,16 +59,16 @@ function [F,G,H] = dlinsys_num(fd,hd,x,u,k)
     end
     
     % discrete dynamics Jacobian
-    F = fd2F_num(fd,x,u,k);
+    F = fd2F_lti(fd,x,u,k);
     
     % discrete input Jacobian
-    G = fd2G_num(fd,x,u,k);
+    G = fd2G_lti(fd,x,u,k);
     
     % discrete measurement Jacobian
     if isempty(hd)
         H = NaN;
     else
-        H = hd2H_num(hd,x,u,k);
+        H = hd2H_lti(hd,x,u,k);
     end
     
 end
