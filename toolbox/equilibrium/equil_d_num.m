@@ -1,9 +1,10 @@
 %==========================================================================
 %
-% find_equil_num  Finds an equilibrium point of a continuous-time nonlinear
-% dynamics equation (numerical).
+% equil_d_num  Finds an equilibrium point of a discrete dynamics equation 
+% (numerical).
 %
-%   [xe,ue] = find_equil_num(f,x0,u0)
+%   [xe,ue] = equil_d_num(fd,x0,u0)
+%   [xe,ue] = equil_d_num(fd,x0,u0,ke)
 %
 % See also TODO.
 %
@@ -23,10 +24,12 @@
 % ------
 % INPUT:
 % ------
-%   f       - (1×1 function_handle) continuous dynamics equation,
-%             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
+%   fd      - (1×1 function_handle) discrete dynamics equation,
+%             xₖ₊₁ = fd(xₖ,uₖ,k) (fd : ℝⁿ×ℝᵐ×ℤ → ℝⁿ)
 %   x0      - (1×1 double) initial guess for equilibrium state vector, x₀
 %   u0      - (1×1 double) initial guess for equilibrium control input, u₀
+%   ke      - (1×1 double) (OPTIONAL) sample number at which to solve for
+%             equilibrium, kₑ (defaults to 0)
 %
 % -------
 % OUTPUT:
@@ -35,19 +38,19 @@
 %   ue      - (m×1 double) equilibrium control input, uₑ
 %
 %==========================================================================
-function [xe,ue] = find_equil_num(f,x0,u0,t0)
+function [xe,ue] = equil_d_num(fd,x0,u0,ke)
     
-    % defaults t0 to 0 if not input
-    if (nargin == 3) || isempty(t0)
-        t0 = 0;
+    % defaults ke to 0
+    if (nargin < 4) || isempty(ke)
+        ke = 0;
     end
     
     % state (n) and input (m) dimensions
     n = length(x0);
     m = length(u0);
     
-    % redefines f as a function of a single variable, z
-    g = @(z) f(z(1:n),z((n+1):(n+m)),t0);
+    % redefines fd as a function of a single variable, z
+    g = @(z) fd(z(1:n),z((n+1):(n+m)),ke);
     
     % initial guess for solution of g(z) = 0
     z0 = [x0;

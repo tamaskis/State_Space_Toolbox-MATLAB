@@ -25,7 +25,7 @@
 % ------
 % INPUT:
 % ------
-%   hd      - (p×1 sym) discrete nonlinear measurement equation
+%   hd      - (p×1 sym) discrete measurement equation
 %   xk      - (n×1 sym) state vector at kth sample, xₖ
 %   xe      - (n×1 sym) (OPTIONAL) equilibrium state vector, xₑ
 %   uk      - (m×1 sym) (OPTIONAL) control input at kth sample, uₖ

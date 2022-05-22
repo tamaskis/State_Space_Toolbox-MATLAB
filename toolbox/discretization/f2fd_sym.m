@@ -1,6 +1,6 @@
 %==========================================================================
 %
-% f2fd_sym  Discretization of a continuous-time nonlinear dynamics equation
+% f2fd_sym  Discrete dynamics equation from continuous dynamics equation
 % (1st-order approximation).
 %
 %   fd = f2fd_sym(f,x)
@@ -70,7 +70,7 @@ function [fd,xk,uk] = f2fd_sym(f,x,u,t)
         tk = [];
     end
     
-    % evaluation of continuous nonlinear dynamics at kth sample time
+    % evaluation of continuous dynamics equation at kth sample time
     fk = subs(f,[x;u;t],[xk;uk;tk]);
     
     % discretization

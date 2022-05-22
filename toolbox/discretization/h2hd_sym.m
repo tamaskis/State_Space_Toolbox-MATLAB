@@ -1,6 +1,6 @@
 %==========================================================================
 %
-% h2hd_sym  Discretization of a continuous-time nonlinear measurement
+% h2hd_sym  Discrete measurement equation from continuous measurement
 % equation.
 %
 %   hd = h2hd_sym(h,x)

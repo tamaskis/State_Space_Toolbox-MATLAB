@@ -1,9 +1,9 @@
 %==========================================================================
 %
-% find_equil_sym  Finds an equilibrium point of a continuous-time nonlinear
-% dynamics equation (symbolic).
+% equil_d_sym  Finds an equilibrium point of a discrete dynamics equation 
+% (symbolic).
 %
-%   [xe,ue] = find_equil_sym(f,x,u)
+%   [xe,ue] = equil_d_sym(fd,xk,uk)
 %
 % See also TODO.
 %
@@ -23,10 +23,9 @@
 % ------
 % INPUT:
 % ------
-%   f       - (n×1 sym) continuous-time nonlinear dynamics equation
-%             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
-%   x       - (n×1 sym) state vector
-%   u       - (m×1 sym) control input
+%   fd      - (n×1 sym) discrete dynamics equation
+%   xk      - (n×1 sym) state vector, xₖ
+%   uk      - (m×1 sym) control input, uₖ
 %
 % -------
 % OUTPUT:
@@ -35,18 +34,18 @@
 %   ue      - (m×1 sym) equilibrium control input, uₑ
 %
 %==========================================================================
-function [xe,ue] = find_equil_sym(f,x,u)
+function [xe,ue] = equil_d_sym(fd,xk,uk)
     
     % state (n) and input (m) dimensions
-    n = length(x);
-    m = length(u);
+    n = length(xk);
+    m = length(uk);
     
     % defines z
-    z = [x;
-         u];
+    z = [xk;
+         uk];
     
     % finds equilibrium point zₑ
-    ze = solve(f == zeros(n,1),z);
+    ze = solve(fd == zeros(n,1),z);
     
     % converts result from structure to symbolic array
     ze = cell2sym(struct2cell(ze));
