@@ -1,12 +1,10 @@
 %==========================================================================
 %
-% h2C_lti  Continuous measurement Jacobian from continuous measurement
-% equation via linearization about an equilibrium point.
+% h2H_fun  Discrete measurement Jacobian from continuous measurement
+% equation.
 %
-%   C = h2C_lti(h,xe)
-%   C = h2C_lti(h,xe,ue)
-%   C = h2C_lti(h,xe,[],tl)
-%   C = h2C_lti(h,xe,ue,tl)
+%   H = h2H_fun(h,dt)
+%   H = h2H_fun(h,dt,t0)
 %
 % See also TODO.
 %
@@ -28,16 +26,27 @@
 % ------
 %   h       - (1×1 function_handle) continuous measurement equation, 
 %             y = h(x,u,t) (h : ℝⁿ×ℝᵐ×ℝ → ℝᵖ)
-%   xe      - (n×1 double) equilibrium state vector, xₑ
-%   ue      - (m×1 double) (OPTIONAL) equilibrium control input, uₑ
-%   tl      - (1×1 double) (OPTIONAL) time at linearization, tₗ
+%   dt      - (1×1 double) time step, Δt
+%   t0      - (1×1 double) (OPTIONAL) initial time, t₀ (defaults to 0)
 %
 % -------
 % OUTPUT:
 % -------
-%   C       - (p×n double) continuous measurement Jacobian
+%   H       - (1×1 function_handle) discrete measurement Jacobian, 
+%             Hₖ = H(xₖ,uₖ,k) (H : ℝⁿ×ℝᵐ×ℤ → ℝᵖˣⁿ)
 %
 %==========================================================================
-function C = h2C_lti(h,xe,ue,tl)
-    C = ijacobian(@(x)h(x,ue,tl),xe);
+function H = h2H_fun(h,dt,t0)
+    
+    % defaults initial time to 0
+    if (nargin < 3) || isempty(t0)
+        t0 = 0;
+    end
+    
+    % time as a function of sample number
+    t = k2t_fun(dt,t0);
+    
+    % function handle for discrete measurement Jacobian
+    H = @(xk,uk,k) ijacobian(@(x)h(x,uk,t(k)),xk);
+    
 end

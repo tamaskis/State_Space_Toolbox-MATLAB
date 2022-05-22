@@ -26,9 +26,8 @@
 % ------
 % INPUT:
 % ------
-%   hd      - (1×1 function_handle) discrete measurement equation
-%               --> if "u" NOT input, then yₖ = hd(xₖ,k) (hd : ℝⁿ×ℤ → ℝᵖ)
-%               --> if "u" input, then yₖ = hd(xₖ,uₖ,k) (hd : ℝⁿ×ℝᵐ×ℤ → ℝᵖ)
+%   hd      - (1×1 function_handle) discrete measurement equation, 
+%             yₖ = hd(xₖ,uₖ,k) (hd : ℝⁿ×ℝᵐ×ℤ → ℝᵖ)
 %   xe      - (n×1 double) equilibrium state vector, xₑ
 %   ue      - (m×1 double) (OPTIONAL) equilibrium control input, uₑ
 %   kl      - (1×1 double) (OPTIONAL) sample number at linearization, kₗ

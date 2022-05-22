@@ -1,10 +1,11 @@
 %==========================================================================
 %
-% f2stm_fun  State transition matrix from continuous-time nonlinear
-% dynamics equation.
+% f2F_fun  Discrete dynamics Jacobian from continuous dynamics equation.
 %
-%   Phi = f2stm_fun(f,dt)
-%   Phi = f2stm_fun(f,dt,method)
+%   F = f2F_fun(f,dt)
+%   F = f2F_fun(f,dt,t0)
+%   F = f2F_fun(f,dt,[],method)
+%   F = f2F_fun(f,dt,t0,method)
 %
 % See also TODO.
 %
@@ -27,6 +28,7 @@
 %   f       - (1×1 function_handle) continuous dynamics equation,
 %             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
 %   dt      - (1×1 double) time step, Δt
+%   t0      - (1×1 double) (OPTIONAL) initial time, t₀ (defaults to 0)
 %   method  - (char) (OPTIONAL) integration method --> 'Euler', 'RK2', 
 %             'RK2 Heun', 'RK2 Ralston', 'RK3', 'RK3 Heun', 'RK3 Ralston', 
 %             'SSPRK3', 'RK4', 'RK4 Ralston', 'RK4 3/8' (defaults to 'RK4')
@@ -34,25 +36,29 @@
 % -------
 % OUTPUT:
 % -------
-%   Phi     - (1×1 function_handle) state transition matrix from current 
-%             time to next time, Φ(t+Δt,t) = Φ(x,u,t)
+%   F       - (1×1 function_handle) discrete dynamics Jacobian, 
+%             Fₖ = F(xₖ,uₖ,k) (F : ℝⁿ×ℝᵐ×ℤ → ℝⁿˣⁿ)
 %
 %==========================================================================
-function Phi = f2stm_fun(f,dt,method)
+function F = f2F_fun(f,dt,t0,method)
+    
+    % defaults initial time to 0
+    if (nargin < 3) || isempty(t0)
+        t0 = 0;
+    end
     
     % defaults method to 'RK4'
     if (nargin < 3) || isempty(method)
         method = 'RK4';
     end
     
-    % function handle for dynamics Jacobian
-    A = f2A_fun(f);
-    
     % function handle for state transition matrix
-    if (nargin == 6) && ~isempty(method)
-        Phi = @(x,u,t) Af2stm_num(A,f,x,u,t,dt,method);
-    else
-        Phi = @(x,u,t) Af2stm_num(A,f,x,u,t,dt);
-    end
+    Phi = f2stm_fun(f,dt,method);
+    
+    % function handle for time
+    t = k2t_fun(dt,t0);
+    
+    % function handle for discrete dynamics Jacobian
+    F = @(xk,uk,k) Phi(xk,uk,t(k));
     
 end
