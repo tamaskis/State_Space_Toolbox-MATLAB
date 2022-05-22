@@ -1,3 +1,65 @@
+%% example_inverted_pendulum.m
+% State Space Toolbox
+%
+% Inverted pendulum example (Appendix B of "State Space Systems: 
+% Linearization, Discretization, and Simulation").
+%
+% Copyright © 2022 Tamas Kis
+% Last Update: 2022-05-21
+% Website: https://tamaskis.github.io
+% Contact: tamas.a.kis@outlook.com
+
+
+
+%% SCRIPT SETUP
+
+% clears Workspace and Command Window, closes all figures
+clear; clc; close all;
+
+
+
+%% SYSTEM PARAMETERS
+
+l = 1;      % pendulum length [m]
+m = 1;      % pendulum mass [kg]
+M = 10;     % cart mass [kg]
+g = 10;     % gravitational acceleration [m/s²]
+
+
+
+%% CONTINUOUS-TIME NONLINEAR SYSTEM
+
+% continuous-time nonlinear dynamics equation (see "dynamics" function at
+% the bottom of this script)
+f = @(x,u,t) dynamics(x,u,M,m,l,g);
+
+% continuous-time nonlinear measurement equation
+h = @(x,t) x(3);
+
+% initial guess for equilibrium point
+x0 = zeros(4,1);
+u0 = 0;
+
+% equilibrium point
+[xe,ue] = find_equil_num(f,x0,u0);
+
+
+
+%% CONTINUOUS-TIME LINEARIZED SYSTEM
+
+% we can linearize the system all at once using the clinsys_lti function
+[A,B,C,D] = clinsys_lti(f,h,xe,ue);
+
+% alternatively, we could have done the following:
+%   A = f2A_lti(f,xe,ue)
+%   B = f2B_lti(f,xe,ue)
+%   C = h2C_lti(h,xe,ue)
+%   C = h2D_lti(h,xe,ue)
+
+
+
+%% FUNCTIONS
+
 %==========================================================================
 % dynamics  Dynamics of an inverted pendulum on a cart.
 %--------------------------------------------------------------------------

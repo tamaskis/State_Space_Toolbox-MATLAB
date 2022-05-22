@@ -6,7 +6,7 @@
 %   H = h2C_fun(h)
 %
 % Author: Tamas Kis
-% Last Update: 2022-03-31
+% Last Update: 2022-05-21
 %
 %--------------------------------------------------------------------------
 %
@@ -41,11 +41,11 @@ function C = h2C_fun(h)
     
     % function handle for C(x,t)
     if num_arg == 2
-        C = @(x,t) h2C_num(h,x,[],t);
+        C = @(x,t) ijacobian(@(x)h(x,t),x);
     
     % function handle for C(x,u,t)
     else
-        C = @(x,u,t) h2C_num(h,x,u,t);
+        C = @(x,u,t) ijacobian(@(x)h(x,u,t),x);
     
     end
     

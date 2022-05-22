@@ -1,13 +1,13 @@
 %==========================================================================
 %
-% h2D_num  Continuous feedforward Jacobian from continuous measurement
+% h2D_lti  Continuous feedforward Jacobian from continuous measurement
 % equation.
 %
-%   D = h2D_num(h,x,u)
-%   D = h2D_num(h,x,u,t)
+%   D = h2D_lti(h,xe,ue)
+%   D = h2D_lti(h,xe,ue,tl)
 %
 % Author: Tamas Kis
-% Last Update: 2022-03-31
+% Last Update: 2022-05-21
 %
 %--------------------------------------------------------------------------
 %
@@ -16,9 +16,9 @@
 % ------
 %   h       - (1×1 function_handle) continuous measurement equation, 
 %             y = h(x,u,t) (h : ℝⁿ×ℝᵐ×ℝ → ℝᵖ)
-%   x       - (n×1 double) state vector to linearize about
-%   u       - (m×1 double) control input to linearize about
-%   t       - (1×1 double) (OPTIONAL) time at linearization
+%   xe      - (n×1 double) equilibrium state vector, xₑ
+%   ue      - (m×1 double) sequilibrium control input, uₑ
+%   tl      - (1×1 double) (OPTIONAL) time at linearization, tₗ
 %
 % -------
 % OUTPUT:
@@ -30,18 +30,30 @@
 % -----
 %   --> If linearizing about equilibrium point (xₑ,uₑ), input xₑ for x and
 %       uₑ for u.
-%   --> If linearizing about reference trajectory (xᵣ,uᵣ), input xᵣ at time
-%       t for x and uᵣ at time t for u.
 %
 %==========================================================================
-function D = h2D_num(h,x,u,t)
+function D = h2D_lti(h,xe,ue,tl)
+    
+    % assumes h has three input arguments (i.e. h(x,u,t))
+    num_arg = 3;
+    
+    % updates "num_arg" to 2 if h is really input as h(x,t)
+    try
+        h(0,0,0);
+    catch
+        num_arg = 2;
+    end
     
     % defaults time to empty vector if not specified
     if (nargin < 4)
-        t = [];
+        tl = [];
     end
     
-    % continuous feedforward Jacobian
-    D = ijacobian(@(u)h(x,u,t),u);
+    % continuous measurement Jacobian
+    if num_arg == 3
+        D = ijacobian(@(u)h(xe,u,tl),ue);
+    else
+        D = 0;
+    end
     
 end

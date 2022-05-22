@@ -1,11 +1,11 @@
 %==========================================================================
 %
-% f2B_fun  Continuous input Jacobian from continuous dynamics equation.
+% f2A_fun  Continuous dynamics Jacobian from continuous dynamics equation.
 %
-%   A = f2B_fun(f)
+%   A = f2A_fun(f)
 %
 % Author: Tamas Kis
-% Last Update: 2022-03-31
+% Last Update: 2022-05-21
 %
 %--------------------------------------------------------------------------
 %
@@ -18,10 +18,10 @@
 % -------
 % OUTPUT:
 % -------
-%   B       - (1×1 function_handle) continuous input Jacobian, 
-%             B(t) = B(x,u,t) (B : ℝⁿ×ℝᵐ×ℝ → ℝⁿˣᵐ)
+%   A       - (1×1 function_handle) continuous dynamics Jacobian, 
+%             A(t) = A(x,u,t) (A : ℝⁿ×ℝᵐ×ℝ → ℝⁿˣⁿ)
 %
 %==========================================================================
-function B = f2B_fun(f)
-    B = @(x,u,t) f2B_num(f,x,u,t);
+function A = f2A_fun(f)
+    A = @(x,u,t) ijacobian(@(x)f(x,u,t),x);
 end
