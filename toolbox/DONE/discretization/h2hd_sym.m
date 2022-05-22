@@ -1,22 +1,33 @@
 %==========================================================================
 %
-% f2fd_sym  1st-order discretization of continuous nonlinear dynamics.
+% h2hd_sym  Discretization of a continuous-time nonlinear measurement
+% equation.
 %
-%   fd = f2fd_sym(f,x)
-%   fd = f2fd_sym(f,x,u)
-%   fd = f2fd_sym(f,x,[],t)
-%   fd = f2fd_sym(f,x,u,t)
-%   [fd,xk,uk] = f2fd_sym(__)
+%   hd = h2hd_sym(h,x)
+%   hd = h2hd_sym(h,x,u)
+%   hd = h2hd_sym(h,x,[],t)
+%   hd = h2hd_sym(h,x,u,t)
+%   [hd,xk,uk] = h2hd_sym(__)
 %
-% Author: Tamas Kis
-% Last Update: 2022-03-31
+% See also TODO.
+%
+% Copyright © 2022 Tamas Kis
+% Last Update: 2022-05-22
+% Website: https://tamaskis.github.io
+% Contact: tamas.a.kis@outlook.com
+%
+% TOOLBOX DOCUMENTATION:
+% https://tamaskis.github.io/State_Space_Toolbox-MATLAB/
+%
+% TECHNICAL DOCUMENTATION:
+% https://tamaskis.github.io/documentation/State_Space_Systems_Linearization_Discretization_and_Simulation.pdf
 %
 %--------------------------------------------------------------------------
 %
 % ------
 % INPUT:
 % ------
-%   f       - (n×1 sym) continuous nonlinear dynamics equation
+%   h       - (p×1 sym) continuous measurement equation
 %   x       - (n×1 sym) state vector
 %   u       - (m×1 sym) (OPTIONAL) control input
 %   t       - (1×1 sym) (OPTIONAL) time
@@ -24,7 +35,7 @@
 % -------
 % OUTPUT:
 % -------
-%   fd      - (n×1 sym) discrete nonlinear dynamics equation
+%   hd      - (p×1 sym) discrete nonlinear measurement equation
 %   xk      - (n×1 sym) state vector at kth sample
 %   uk      - (m×1 sym) control input at kth sample
 %
@@ -35,14 +46,11 @@
 %       "k".
 %
 %==========================================================================
-function [fd,xk,uk] = f2fd_sym(f,x,u,t)
-
-    % time step
-    syms Delta_t;
+function [hd,xk,uk] = h2hd_sym(h,x,u,t)
     
     % state vector at kth sample time
     xk = subscript_k(x);
-
+    
     % control input at kth sample time (empty vector if "u" not input)
     if (nargin >= 3) && ~isempty(u)
         uk = subscript_k(u);
@@ -50,7 +58,7 @@ function [fd,xk,uk] = f2fd_sym(f,x,u,t)
         u = [];
         uk = [];
     end
-
+    
     % kth sample time (empty vector if "t" not input)
     if (nargin == 4) && ~isempty(t)
         tk = subscript_k(t);
@@ -58,11 +66,8 @@ function [fd,xk,uk] = f2fd_sym(f,x,u,t)
         t = [];
         tk = [];
     end
-
-    % evaluation of continuous nonlinear dynamics at kth sample time
-    fk = subs(f,[x;u;t],[xk;uk;tk]);
-
+    
     % discretization
-    fd = simplify(xk+fk*Delta_t,'Steps',100);
+    hd = subs(h,[x;u;t],[xk;uk;tk]);
     
 end

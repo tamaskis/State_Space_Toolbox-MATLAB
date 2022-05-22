@@ -6,8 +6,18 @@
 %   J = h2J_sym(h,x,u)
 %   J = h2J_sym(h,x,u,xe,ue)
 %
-% Author: Tamas Kis
-% Last Update: 2022-03-31
+% See also TODO.
+%
+% Copyright © 2022 Tamas Kis
+% Last Update: 2022-05-22
+% Website: https://tamaskis.github.io
+% Contact: tamas.a.kis@outlook.com
+%
+% TOOLBOX DOCUMENTATION:
+% https://tamaskis.github.io/State_Space_Toolbox-MATLAB/
+%
+% TECHNICAL DOCUMENTATION:
+% https://tamaskis.github.io/documentation/State_Space_Systems_Linearization_Discretization_and_Simulation.pdf
 %
 %--------------------------------------------------------------------------
 %
@@ -23,7 +33,7 @@
 % -------
 % OUTPUT:
 % -------
-%   J       - (p×m sym) discrete feedforward Jacobian at kth sample time
+%   J       - (p×m sym) discrete feedforward Jacobian at kth sample
 %
 %==========================================================================
 function J = h2J_sym(h,x,u,xe,ue)
