@@ -1,11 +1,10 @@
 %==========================================================================
 %
-% f2stm_num  State transition matrix and propagated state vector from 
-% continuous dynamics equation.
+% f2stm_fun  State transition matrix from continuous-time nonlinear
+% dynamics equation.
 %
-%   Phi = f2stm_num(f,x,u,t,dt,method)
-%   Phi = f2stm_num(f,x,[],[],dt,method)
-%   [Phi,x_next] = f2stm_num(__)
+%   Phi = f2stm_fun(f,dt)
+%   Phi = f2stm_fun(f,dt,method)
 %
 % See also TODO.
 %
@@ -27,41 +26,33 @@
 % ------
 %   f       - (1×1 function_handle) continuous dynamics equation,
 %             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
-%   x       - (n×1 double) state vector at current time, x(t)
-%   u       - (m×1 double) (OPTIONAL) control input at current time, u(t)
-%   t       - (1×1 double) (OPTIONAL) current time
 %   dt      - (1×1 double) time step, Δt
 %   method  - (char) (OPTIONAL) integration method --> 'Euler', 'RK2', 
 %             'RK2 Heun', 'RK2 Ralston', 'RK3', 'RK3 Heun', 'RK3 Ralston', 
-%             'SSPRK3', 'RK4', 'RK4 Ralston', 'RK4 3/8' (defaults to 
-%             'Euler')
+%             'SSPRK3', 'RK4', 'RK4 Ralston', 'RK4 3/8' (defaults to 'RK4')
 %
 % -------
 % OUTPUT:
 % -------
-%   Phi     - (n×n double) state transition matrix from current time to 
-%             next time, Φ(t+Δt,t)
-%   x_next  - (n×1 double) state vector at next time, x(t+Δt)
-%
-% -----
-% NOTE:
-% -----
-%   --> If you would not like to specify "u" or "t", you can input them as
-%       the empty vector "[]".
-%   --> If "u" is input, it is assumed that it is constant over the time
-%       interval [t,t+Δt).
+%   Phi     - (1×1 function_handle) state transition matrix from current 
+%             time to next time, Φ(t+Δt,t) = Φ(x,u,t)
 %
 %==========================================================================
-function Phi = f2stm_num(f,x,u,t,dt,method)
+function Phi = f2stm_fun(f,dt,method)
+    
+    % defaults method to 'RK4'
+    if (nargin < 3) || isempty(method)
+        method = 'RK4';
+    end
     
     % function handle for dynamics Jacobian
     A = f2A_fun(f);
     
-    % solve for Φ(t+Δt,t)
+    % function handle for state transition matrix
     if (nargin == 6) && ~isempty(method)
-        Phi = Af2stm_num(A,f,x,u,t,dt,method);
+        Phi = @(x,u,t) Af2stm_num(A,f,x,u,t,dt,method);
     else
-        Phi = Af2stm_num(A,f,x,u,t,dt);
+        Phi = @(x,u,t) Af2stm_num(A,f,x,u,t,dt);
     end
     
 end

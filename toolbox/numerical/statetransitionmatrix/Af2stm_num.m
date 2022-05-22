@@ -7,8 +7,18 @@
 %   Phi = Af2stm_num(A,f,x,[],[],dt,method)
 %   [Phi,x_next] = Af2stm_num(__)
 %
-% Author: Tamas Kis
-% Last Update: 2022-03-28
+% See also TODO.
+%
+% Copyright © 2022 Tamas Kis
+% Last Update: 2022-05-22
+% Website: https://tamaskis.github.io
+% Contact: tamas.a.kis@outlook.com
+%
+% TOOLBOX DOCUMENTATION:
+% https://tamaskis.github.io/State_Space_Toolbox-MATLAB/
+%
+% TECHNICAL DOCUMENTATION:
+% https://tamaskis.github.io/documentation/State_Space_Systems_Linearization_Discretization_and_Simulation.pdf
 %
 %--------------------------------------------------------------------------
 %
@@ -25,8 +35,7 @@
 %   dt      - (1×1 double) time step, Δt
 %   method  - (char) (OPTIONAL) integration method --> 'Euler', 'RK2', 
 %             'RK2 Heun', 'RK2 Ralston', 'RK3', 'RK3 Heun', 'RK3 Ralston', 
-%             'SSPRK3', 'RK4', 'RK4 Ralston', 'RK4 3/8' (defaults to 
-%             'Euler')
+%             'SSPRK3', 'RK4', 'RK4 Ralston', 'RK4 3/8' (defaults to 'RK4')
 %
 % -------
 % OUTPUT:
@@ -38,19 +47,19 @@
 % -----
 % NOTE:
 % -----
-%   --> If you would not like to specify "u" or "t", you can input them as
-%       the empty vector "[]".
+%   --> If you do not want to specify "u" or "t", you can input them as the
+%       empty vector "[]".
 %   --> If "u" is input, it is assumed that it is constant over the time
 %       interval [t,t+Δt).
 %
 %==========================================================================
 function [Phi,x_next] = Af2stm_num(A,f,x,u,t,dt,method)
     
-    % defaults method to 'Euler' if not specified
+    % defaults method to 'RK4'
     if (nargin < 7) || isempty(method)
-        method = 'Euler';
+        method = 'RK4';
     end
-
+    
     % state dimension
     n = length(x);
     
