@@ -35,9 +35,9 @@
 % -------
 % OUTPUT:
 % -------
-%   hd      - (p×1 sym) discrete nonlinear measurement equation
-%   xk      - (n×1 sym) state vector at kth sample
-%   uk      - (m×1 sym) control input at kth sample
+%   hd      - (p×1 sym) discrete measurement equation
+%   xk      - (n×1 sym) state vector at kth sample, xₖ
+%   uk      - (m×1 sym) control input at kth sample, uₖ
 %
 % -----
 % NOTE:

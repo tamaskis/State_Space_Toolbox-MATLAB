@@ -1,7 +1,7 @@
 %==========================================================================
 %
-% f2fd_sym  1st-order discretization of a continuous-time nonlinear
-% dynamics equation.
+% f2fd_sym  Discretization of a continuous-time nonlinear dynamics equation
+% (1st-order approximation).
 %
 %   fd = f2fd_sym(f,x)
 %   fd = f2fd_sym(f,x,u)
@@ -27,7 +27,7 @@
 % ------
 % INPUT:
 % ------
-%   f       - (n×1 sym) continuous nonlinear dynamics equation
+%   f       - (n×1 sym) continuous dynamics equation
 %   x       - (n×1 sym) state vector
 %   u       - (m×1 sym) (OPTIONAL) control input
 %   t       - (1×1 sym) (OPTIONAL) time
@@ -35,9 +35,9 @@
 % -------
 % OUTPUT:
 % -------
-%   fd      - (n×1 sym) discrete nonlinear dynamics equation
-%   xk      - (n×1 sym) state vector at kth sample
-%   uk      - (m×1 sym) control input at kth sample
+%   fd      - (n×1 sym) discrete dynamics equation
+%   xk      - (n×1 sym) state vector at kth sample, xₖ
+%   uk      - (m×1 sym) control input at kth sample, uₖ
 %
 % -----
 % NOTE:

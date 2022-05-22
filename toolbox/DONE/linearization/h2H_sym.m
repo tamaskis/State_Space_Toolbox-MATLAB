@@ -1,11 +1,11 @@
 %==========================================================================
 %
-% f2F_sym  Discrete dynamics Jacobian from continuous dynamics equation
-% (1st-order approximation).
+% h2H_sym  Discrete measurement Jacobian from continuous measurement
+% equation.
 %
-%   F = f2F_sym(f,x)
-%   F = f2F_sym(f,x,xe)
-%   F = f2F_sym(f,x,xe,u,ue)
+%   H = h2H_sym(h,x)
+%   H = h2H_sym(h,x,xe)
+%   H = h2H_sym(h,x,xe,u,ue)
 %
 % See also TODO.
 %
@@ -25,31 +25,31 @@
 % ------
 % INPUT:
 % ------
-%   f       - (n×1 sym) continuous dynamics equation
+%   h       - (p×1 sym) continuous measurement equation
 %   x       - (n×1 sym) state vector
-%   xe      - (n×1 sym) (OPTIONAL) equilibrium state vector
+%   xe      - (n×1 sym) (OPTIONAL) equilibrium state vector, xₑ
 %   u       - (m×1 sym) (OPTIONAL) control input
-%   ue      - (m×1 sym) (OPTIONAL) equilibrium control input
+%   ue      - (m×1 sym) (OPTIONAL) equilibrium control input, uₑ
 %
 % -------
 % OUTPUT:
 % -------
-%   F       - (n×n sym) discrete dynamics Jacobian at kth sample
+%   H       - (p×n sym) discrete measurement Jacobian at kth sample
 %
 %==========================================================================
-function F = f2F_sym(f,x,xe,u,ue)
+function H = h2H_sym(h,x,xe,u,ue)
     
-    % defaults xe to empty vector if not input
+    % defaults xe to empty vector
     if (nargin < 3)
         xe = [];
     end
     
-    % defaults u to empty vector if not input
+    % defaults u to empty vector
     if (nargin < 4)
         u = [];
     end
     
-    % defaults ue to empty vector if not input
+    % defaults ue to empty vector
     if (nargin < 5)
         ue = [];
     end
@@ -57,10 +57,10 @@ function F = f2F_sym(f,x,xe,u,ue)
     % continuous time variable
     syms t;
     
-    % discrete dynamics equation from continuous dynamics equation
-    [fd,xk,uk] = f2fd_sym(f,x,u,t);
+    % discrete measurement equation from continuous measurement equation
+    [hd,xk,uk] = h2hd_sym(h,x,u,t);
     
-    % discrete dynamics Jacobian from discrete dynamics equation
-    F = fd2F_sym(fd,xk,xe,uk,ue);
+    % discrete measurement Jacobian from discrete measurement equation
+    H = hd2H_sym(hd,xk,xe,uk,ue);
     
 end

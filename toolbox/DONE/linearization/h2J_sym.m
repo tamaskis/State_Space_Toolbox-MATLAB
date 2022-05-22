@@ -1,11 +1,10 @@
 %==========================================================================
 %
-% h2H_sym  Discrete measurement Jacobian from continuous measurement
+% h2J_sym  Discrete feedforward Jacobian from continuous measurement
 % equation.
 %
-%   H = h2H_sym(h,x)
-%   H = h2H_sym(h,x,xe)
-%   H = h2H_sym(h,x,xe,u,ue)
+%   J = h2J_sym(h,x,u)
+%   J = h2J_sym(h,x,u,xe,ue)
 %
 % See also TODO.
 %
@@ -27,29 +26,24 @@
 % ------
 %   h       - (p×1 sym) continuous measurement equation
 %   x       - (n×1 sym) state vector
-%   xe      - (n×1 sym) (OPTIONAL) equilibrium state vector
-%   u       - (m×1 sym) (OPTIONAL) control input
-%   ue      - (m×1 sym) (OPTIONAL) equilibrium control input
+%   u       - (m×1 sym) control input
+%   xe      - (n×1 sym) (OPTIONAL) equilibrium state vector, xₑ
+%   ue      - (m×1 sym) (OPTIONAL) equilibrium control input, uₑ
 %
 % -------
 % OUTPUT:
 % -------
-%   H       - (p×n sym) discrete measurement Jacobian at kth sample
+%   J       - (p×m sym) discrete feedforward Jacobian at kth sample
 %
 %==========================================================================
-function H = h2H_sym(h,x,xe,u,ue)
+function J = h2J_sym(h,x,u,xe,ue)
     
-    % defaults xe to empty vector if not input
-    if (nargin < 3)
+    % defaults xe to empty vector
+    if (nargin < 4)
         xe = [];
     end
     
-    % defaults u to empty vector if not input
-    if (nargin < 4)
-        u = [];
-    end
-    
-    % defaults ue to empty vector if not input
+    % defaults ue to empty vector
     if (nargin < 5)
         ue = [];
     end
@@ -60,7 +54,7 @@ function H = h2H_sym(h,x,xe,u,ue)
     % discrete measurement equation from continuous measurement equation
     [hd,xk,uk] = h2hd_sym(h,x,u,t);
     
-    % discrete measurement Jacobian from discrete measurement equation
-    H = hd2H_sym(hd,xk,xe,uk,ue);
+    % discrete feedforward Jacobian from discrete measurement equation
+    J = hd2J_sym(hd,uk,ue,xk,xe);
     
 end

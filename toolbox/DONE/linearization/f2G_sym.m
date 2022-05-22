@@ -1,10 +1,10 @@
 %==========================================================================
 %
-% h2J_sym  Discrete feedforward Jacobian from continuous measurement
-% equation.
+% f2G_sym  Discrete input Jacobian from continuous dynamics equation 
+% (1st-order approximation).
 %
-%   J = h2J_sym(h,x,u)
-%   J = h2J_sym(h,x,u,xe,ue)
+%   G = f2G_sym(f,x,u)
+%   G = f2G_sym(f,x,u,xe,ue)
 %
 % See also TODO.
 %
@@ -24,26 +24,26 @@
 % ------
 % INPUT:
 % ------
-%   h       - (p×1 sym) continuous measurement equation
+%   f       - (n×1 sym) continuous dynamics equation
 %   x       - (n×1 sym) state vector
 %   u       - (m×1 sym) control input
-%   xe      - (n×1 sym) (OPTIONAL) equilibrium state vector
-%   ue      - (m×1 sym) (OPTIONAL) equilibrium control input
+%   xe      - (n×1 sym) (OPTIONAL) equilibrium state vector, xₑ
+%   ue      - (m×1 sym) (OPTIONAL) equilibrium control input, uₑ
 %
 % -------
 % OUTPUT:
 % -------
-%   J       - (p×m sym) discrete feedforward Jacobian at kth sample
+%   G       - (n×m sym) discrete input Jacobian at kth sample
 %
 %==========================================================================
-function J = h2J_sym(h,x,u,xe,ue)
+function G = f2G_sym(f,x,u,xe,ue)
     
-    % defaults xe to empty vector if not input
+    % defaults xe to empty vector
     if (nargin < 4)
         xe = [];
     end
     
-    % defaults ue to empty vector if not input
+    % defaults ue to empty vector
     if (nargin < 5)
         ue = [];
     end
@@ -51,10 +51,10 @@ function J = h2J_sym(h,x,u,xe,ue)
     % continuous time variable
     syms t;
     
-    % discrete measurement equation from continuous measurement equation
-    [hd,xk,uk] = h2hd_sym(h,x,u,t);
+    % discrete dynamics equation from continuous dynamics equation
+    [fd,xk,uk] = f2fd_sym(f,x,u,t);
     
-    % discrete feedforward Jacobian from discrete measurement equation
-    J = hd2J_sym(hd,uk,ue,xk,xe);
+    % discrete input Jacobian from discrete dynamics equation
+    G = fd2G_sym(fd,uk,ue,xk,xe);
     
 end

@@ -4,8 +4,16 @@
 %
 %   var_k = subscript_k(var)
 %
-% Author: Tamas Kis
-% Last Update: 2022-03-29
+% Copyright © 2022 Tamas Kis
+% Last Update: 2022-05-22
+% Website: https://tamaskis.github.io
+% Contact: tamas.a.kis@outlook.com
+%
+% TOOLBOX DOCUMENTATION:
+% https://tamaskis.github.io/State_Space_Toolbox-MATLAB/
+%
+% TECHNICAL DOCUMENTATION:
+% https://tamaskis.github.io/documentation/State_Space_Systems_Linearization_Discretization_and_Simulation.pdf
 %
 % REFERENCES:
 %   [1] https://stackoverflow.com/questions/57613210/rename-symbolic-variable-matlab
