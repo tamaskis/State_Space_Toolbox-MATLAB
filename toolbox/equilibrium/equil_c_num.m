@@ -4,12 +4,11 @@
 % (numerical).
 %
 %   [xe,ue] = equil_c_num(f,x0,u0)
-%   [xe,ue] = equil_c_num(f,x0,u0,te)
 %
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-22
+% Last Update: 2022-06-03
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -28,8 +27,6 @@
 %             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
 %   x0      - (1×1 double) initial guess for equilibrium state vector, x₀
 %   u0      - (1×1 double) initial guess for equilibrium control input, u₀
-%   te      - (1×1 double) (OPTIONAL) time at which to solve for
-%             equilibrium, tₑ (defaults to 0)
 %
 % -------
 % OUTPUT:
@@ -38,19 +35,14 @@
 %   ue      - (m×1 double) equilibrium control input, uₑ
 %
 %==========================================================================
-function [xe,ue] = equil_c_num(f,x0,u0,te)
-    
-    % defaults te to 0
-    if (nargin < 4) || isempty(te)
-        te = 0;
-    end
+function [xe,ue] = equil_c_num(f,x0,u0)
     
     % state (n) and input (m) dimensions
     n = length(x0);
     m = length(u0);
     
     % redefines f as a function of a single variable, z
-    g = @(z) f(z(1:n),z((n+1):(n+m)),te);
+    g = @(z) f(z(1:n),z((n+1):(n+m)),0);
     
     % initial guess for solution of g(z) = 0
     z0 = [x0;

@@ -4,12 +4,11 @@
 % equation via linearization about an equilibrium point.
 %
 %   J = hd2J_lti(hd,xe,ue)
-%   J = hd2J_lti(hd,xe,ue,kl)
 %
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-22
+% Last Update: 2022-06-03
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -28,7 +27,6 @@
 %             yₖ = hd(xₖ,uₖ,k) (hd : ℝⁿ×ℝᵐ×ℤ → ℝᵖ)
 %   xe      - (n×1 double) equilibrium state vector, xₑ
 %   ue      - (m×1 double) equilibrium control input, uₑ
-%   kl      - (1×1 double) (OPTIONAL) sample number at linearization, kₗ
 %
 % -------
 % OUTPUT:
@@ -36,14 +34,6 @@
 %   J       - (p×m double) discrete feedforward Jacobian
 %
 %==========================================================================
-function J = hd2J_lti(hd,xe,ue,kl)
-    
-    % defaults sample number at linearization to empty vector
-    if (nargin < 4)
-        kl = [];
-    end
-    
-    % discrete feedforward Jacobian
-    J = ijacobian(@(uk)hd(xe,uk,kl),ue);
-    
+function J = hd2J_lti(hd,xe,ue)
+    J = ijacobian(@(uk)hd(xe,uk,0),ue);
 end

@@ -4,12 +4,11 @@
 % (numerical).
 %
 %   [xe,ue] = equil_d_num(fd,x0,u0)
-%   [xe,ue] = equil_d_num(fd,x0,u0,ke)
 %
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-22
+% Last Update: 2022-06-03
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -28,8 +27,6 @@
 %             xₖ₊₁ = fd(xₖ,uₖ,k) (fd : ℝⁿ×ℝᵐ×ℤ → ℝⁿ)
 %   x0      - (1×1 double) initial guess for equilibrium state vector, x₀
 %   u0      - (1×1 double) initial guess for equilibrium control input, u₀
-%   ke      - (1×1 double) (OPTIONAL) sample number at which to solve for
-%             equilibrium, kₑ (defaults to 0)
 %
 % -------
 % OUTPUT:
@@ -38,19 +35,14 @@
 %   ue      - (m×1 double) equilibrium control input, uₑ
 %
 %==========================================================================
-function [xe,ue] = equil_d_num(fd,x0,u0,ke)
-    
-    % defaults ke to 0
-    if (nargin < 4) || isempty(ke)
-        ke = 0;
-    end
+function [xe,ue] = equil_d_num(fd,x0,u0)
     
     % state (n) and input (m) dimensions
     n = length(x0);
     m = length(u0);
     
     % redefines fd as a function of a single variable, z
-    g = @(z) fd(z(1:n),z((n+1):(n+m)),ke);
+    g = @(z) fd(z(1:n),z((n+1):(n+m)),0);
     
     % initial guess for solution of g(z) = 0
     z0 = [x0;

@@ -4,12 +4,11 @@
 % via linearization about an equilibrium point.
 %
 %   G = fd2G_lti(fd,xe,ue)
-%   G = fd2G_lti(fd,xe,ue,kl)
 %
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-22
+% Last Update: 2022-06-03
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -28,7 +27,6 @@
 %             xₖ₊₁ = fd(xₖ,uₖ,k) (fd : ℝⁿ×ℝᵐ×ℤ → ℝⁿ)
 %   xe      - (n×1 double) equilibrium state vector, xₑ
 %   ue      - (m×1 double) equilibrium control input, uₑ
-%   kl      - (1×1 double) (OPTIONAL) sample number at linearization, kₗ
 %
 % -------
 % OUTPUT:
@@ -36,14 +34,6 @@
 %   G       - (n×m double) discrete input Jacobian
 %
 %==========================================================================
-function G = fd2G_lti(fd,xe,ue,kl)
-    
-    % defaults sample number to empty vector
-    if (nargin < 4)
-        kl = [];
-    end
-    
-    % evaluates discrete input Jacobian
-    G = ijacobian(@(uk)fd(xe,uk,kl),ue);
-    
+function G = fd2G_lti(fd,xe,ue)
+    G = ijacobian(@(uk)fd(xe,uk,0),ue);
 end

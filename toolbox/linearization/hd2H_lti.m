@@ -5,13 +5,11 @@
 %
 %   H = hd2H_lti(hd,xe)
 %   H = hd2H_lti(hd,xe,ue)
-%   H = hd2H_lti(hd,xe,[],kl)
-%   H = hd2H_lti(hd,xe,ue,kl)
 %
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-22
+% Last Update: 2022-06-03
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -30,7 +28,6 @@
 %             yₖ = hd(xₖ,uₖ,k) (hd : ℝⁿ×ℝᵐ×ℤ → ℝᵖ)
 %   xe      - (n×1 double) equilibrium state vector, xₑ
 %   ue      - (m×1 double) (OPTIONAL) equilibrium control input, uₑ
-%   kl      - (1×1 double) (OPTIONAL) sample number at linearization, kₗ
 %
 % -------
 % OUTPUT:
@@ -38,19 +35,14 @@
 %   H       - (p×n double) discrete measurement Jacobian
 %
 %==========================================================================
-function H = hd2H_lti(hd,xe,ue,kl)
+function H = hd2H_lti(hd,xe,ue)
     
     % defaults equilibrium control input to empty vector
     if (nargin < 3)
         ue = [];
     end
     
-    % defaults sample number at linearization to empty vector
-    if (nargin < 4)
-        kl = [];
-    end
-    
     % discrete measurement Jacobian
-    H = ijacobian(@(x)hd(x,ue,kl),xe);
+    H = ijacobian(@(x)hd(x,ue,0),xe);
     
 end

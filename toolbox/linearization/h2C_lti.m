@@ -5,13 +5,11 @@
 %
 %   C = h2C_lti(h,xe)
 %   C = h2C_lti(h,xe,ue)
-%   C = h2C_lti(h,xe,[],tl)
-%   C = h2C_lti(h,xe,ue,tl)
 %
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-22
+% Last Update: 2022-06-03
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -30,7 +28,6 @@
 %             y = h(x,u,t) (h : ℝⁿ×ℝᵐ×ℝ → ℝᵖ)
 %   xe      - (n×1 double) equilibrium state vector, xₑ
 %   ue      - (m×1 double) (OPTIONAL) equilibrium control input, uₑ
-%   tl      - (1×1 double) (OPTIONAL) time at linearization, tₗ
 %
 % -------
 % OUTPUT:
@@ -38,6 +35,14 @@
 %   C       - (p×n double) continuous measurement Jacobian
 %
 %==========================================================================
-function C = h2C_lti(h,xe,ue,tl)
-    C = ijacobian(@(x)h(x,ue,tl),xe);
+function C = h2C_lti(h,xe,ue)
+    
+    % defaults equilibrium control input to empty vector
+    if (nargin < 3)
+        ue = [];
+    end
+    
+    % continuous measurement Jacobian
+    C = ijacobian(@(x)h(x,ue,0),xe);
+    
 end

@@ -5,13 +5,11 @@
 %
 %   F = fd2F_lti(fd,xe)
 %   F = fd2F_lti(fd,xe,ue)
-%   F = fd2F_lti(fd,xe,[],kl)
-%   F = fd2F_lti(fd,xe,ue,kl)
 %
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-22
+% Last Update: 2022-06-03
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -30,7 +28,6 @@
 %             xₖ₊₁ = fd(xₖ,uₖ,k) (fd : ℝⁿ×ℝᵐ×ℤ → ℝⁿ)
 %   xe      - (n×1 double) equilibrium state vector, xₑ
 %   ue      - (m×1 double) (OPTIONAL) equilibrium control input, uₑ
-%   kl      - (1×1 double) (OPTIONAL) sample number at linearization, kₗ
 %
 % -------
 % OUTPUT:
@@ -38,19 +35,14 @@
 %   F       - (n×n double) discrete dynamics Jacobian
 %
 %==========================================================================
-function F = fd2F_lti(fd,xe,ue,kl)
+function F = fd2F_lti(fd,xe,ue)
     
-    % defaults control input to empty vector
+    % defaults equilibrium control input to empty vector
     if (nargin < 3)
         ue = [];
     end
     
-    % defaults sample number to empty vector
-    if (nargin < 4)
-        kl = [];
-    end
-    
     % discrete dynamics Jacobian
-    F = ijacobian(@(xk)fd(xk,ue,kl),xe);
+    F = ijacobian(@(xk)fd(xk,ue,0),xe);
     
 end
