@@ -3,14 +3,15 @@
 % Af2stm_num  State transition matrix and propagated state vector from 
 % continuous dynamics Jacobian and continuous dynamics equation.
 %
-%   Phi = Af2stm_num(A,f,x,u,t,dt,method)
-%   Phi = Af2stm_num(A,f,x,[],[],dt,method)
+%   Phi = Af2stm_num(A,f,dt,x)
+%   Phi = Af2stm_num(A,f,dt,x,u,t)
+%   Phi = Af2stm_num(A,f,dt,x,u,t,dtau,method)
 %   [Phi,x_next] = Af2stm_num(__)
 %
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-22
+% Last Update: 2022-06-04
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -29,10 +30,12 @@
 %             (A : ℝⁿ×ℝᵐ×ℝ → ℝⁿˣⁿ)
 %   f       - (1×1 function_handle) continuous dynamics equation,
 %             dx/dt = f(x,u,t) (f : ℝⁿ×ℝᵐ×ℝ → ℝⁿ)
+%   dt      - (1×1 double) macro time step, Δt
 %   x       - (n×1 double) state vector at current time, x(t)
-%   u       - (m×1 double) (OPTIONAL) control input at current time, u(t)
+%   u       - (1×1 function_handle) (OPTIONAL) control law, u(x,t) 
+%             (u : ℝⁿ×ℝ → ℝᵐ) (defaults to empty vector)
 %   t       - (1×1 double) (OPTIONAL) current time
-%   dt      - (1×1 double) time step, Δt
+%   dtau    - (1×1 double) (OPTIONAL) micro time step, Δτ
 %   method  - (char) (OPTIONAL) integration method --> 'Euler', 'RK2', 
 %             'RK2 Heun', 'RK2 Ralston', 'RK3', 'RK3 Heun', 'RK3 Ralston', 
 %             'SSPRK3', 'RK4', 'RK4 Ralston', 'RK4 3/8' (defaults to 'RK4')
@@ -47,16 +50,28 @@
 % -----
 % NOTE:
 % -----
-%   --> If you do not want to specify "u" or "t", you can input them as the
-%       empty vector "[]".
+%   --> If you do not want to specify "u", "t", "dtau", or "method", you 
+%       can input them as the empty vector "[]".
 %   --> If "u" is input, it is assumed that it is constant over the time
 %       interval [t,t+Δt).
 %
 %==========================================================================
-function [Phi,x_next] = Af2stm_num(A,f,x,u,t,dt,method)
+function [Phi,x_next] = Af2stm_num(A,f,dt,x,u,t,dtau,method)
+    
+    % defaults control input to empty vector
+    if (nargin < 5) || isempty(u)
+        u = [];
+    end
+    
+    % defaults time to 0
+    if (nargin < 6) || isempty(t)
+        t = 0;
+    end
+    
+    % TODO: micro step
     
     % defaults method to 'RK4'
-    if (nargin < 7) || isempty(method)
+    if (nargin < 8) || isempty(method)
         method = 'RK4';
     end
     
@@ -67,7 +82,8 @@ function [Phi,x_next] = Af2stm_num(A,f,x,u,t,dt,method)
     Psik = [eye(n),x];
     
     % function handle for dΨ/dt = [AΦ f]
-    dPsidt = @(t,Psi) [A(Psi(:,n+1),u,t)*Psi(:,1:n),f(Psi(:,n+1),u,t)];
+    dPsidt = @(t,Psi) [A(Psi(:,n+1),u(Psi(:,n+1),t),t)*Psi(:,1:n),...
+        f(Psi(:,n+1),u(Psi(:,n+1),t),t)];
     
     % solve for Ψ(t+Δt,t)
     if strcmpi(method,'Euler')
