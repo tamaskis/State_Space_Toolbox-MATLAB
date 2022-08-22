@@ -10,7 +10,7 @@
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-05-22
+% Last Update: 2022-06-04
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -57,27 +57,27 @@ function fd = f2fd_fun(f,dt,t0,method)
     
     % discretization
     if strcmpi(method,'Euler')
-        fd = @(xk,uk,k) RK1_euler_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK1_euler(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'RK2')
-        fd = @(xk,uk,k) RK2_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK2(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'RK2 Heun')
-        fd = @(xk,uk,k) RK2_heun_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK2_heun(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'RK2 Ralston')
-        fd = @(xk,uk,k) RK2_ralston_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK2_ralston(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'RK3')
-        fd = @(xk,uk,k) RK3_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK3(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'RK3 Heun')
-        fd = @(xk,uk,k) RK3_heun_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK3_heun(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'RK3 Ralston')
-        fd = @(xk,uk,k) RK3_ralston_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK3_ralston(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'SSPRK3')
-        fd = @(xk,uk,k) SSPRK3_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) SSPRK3(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'RK4')
-        fd = @(xk,uk,k) RK4_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK4(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'RK4 Ralston')
-        fd = @(xk,uk,k) RK4_ralston_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK4_ralston(@(t,x)f(x,uk,t),t(k),xk,dt);
     elseif strcmpi(method,'RK4 3/8')
-        fd = @(xk,uk,k) RK4_38_step(@(t,x)f(x,uk,t),t(k),xk,dt);
+        fd = @(xk,uk,k) RK4_38(@(t,x)f(x,uk,t),t(k),xk,dt);
     end
     
 end

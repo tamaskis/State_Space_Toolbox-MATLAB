@@ -1,14 +1,14 @@
 %==========================================================================
 %
-% equil_c_num  Finds an equilibrium point of a continuous dynamics equation
-% (numerical).
+% equil_c_num  Numerically solves for an equilibrium point of a 
+% continuous-time system.
 %
 %   [xe,ue] = equil_c_num(f,x0,u0)
 %
 % See also TODO.
 %
 % Copyright © 2022 Tamas Kis
-% Last Update: 2022-06-03
+% Last Update: 2022-06-16
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
